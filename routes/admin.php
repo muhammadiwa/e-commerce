@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\Admin\SliderController;
+use App\Http\Controllers\Backend\Admin\CategoryController;
 
 // Admin Routes
 Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
@@ -15,3 +16,6 @@ Route::resource('profile', ProfileController::class);
 
 // Sliders Routes
 Route::resource('sliders', SliderController::class);
+
+/** Category Route  */
+Route::resource('category', CategoryController::class);

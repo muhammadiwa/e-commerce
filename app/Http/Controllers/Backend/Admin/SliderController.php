@@ -33,6 +33,16 @@ class SliderController extends Controller
 
     public function store(Request $request)
     {
+        $msg = [
+            'banner.required' => 'Banner is required',
+            'type.required' => 'Type is required',
+            'title.required' => 'Title is required',
+            'status.required' => 'Status is required',
+            'starting_price.max' => 'Starting Price is too long',
+            'btn_url.url' => 'Button URL is not valid URL',
+            'serial.integer' => 'Serial is not valid integer',
+        ];
+        
         $request->validate([
             'banner' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
             'type' => 'string|max:200',
@@ -41,7 +51,7 @@ class SliderController extends Controller
             'btn_url' => 'nullable|url',
             'serial' => 'required|integer',
             'status' => 'required',
-        ]);
+        ], $msg);
 
         DB::beginTransaction();
         try {
@@ -64,7 +74,6 @@ class SliderController extends Controller
             $slider->save();
             DB::commit();
             // toastr()->success('Slider created successfully.', 'Success!');
-            // return redirect()->route('admin.sliders.index');
             return response()->json([
                 'status' => 200,
                 'message' => 'Slider created successfully.'
@@ -72,9 +81,6 @@ class SliderController extends Controller
         } catch (\Exception $e) {
             // Handle the exception
             DB::rollBack();
-            // toastr()->error('Failed to create slider. Please try again.', 'Error!');
-            // return redirect()->back();
-            // Log::error($e->getMessage());
             return response()->json([
                 'code' => 500,
                 'message' => 'Failed to create slider. Please try again.'
@@ -84,66 +90,20 @@ class SliderController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'banner' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
-    //         'type' => 'string|max:200',
-    //         'title' => 'required|max:200',
-    //         'starting_price' => 'max:200',
-    //         'btn_url' => 'url',
-    //         'serial' => 'required|integer',
-    //         'status' => 'required',
-    //     ]);
-
-    //     try {
-    //         DB::beginTransaction();
-    //         $slider = new Slider();
-
-    //         /** Handle File Upload */
-    //         $fileData = $this->uploadImage($request, 'banner', 'app/public/uploads'); // Updated method call
-
-    //         $fileName = $fileData['fileName'];
-    //         $imagePath = 'storage/uploads/' . $fileName;
-
-    //         $slider->banner = $imagePath;
-    //         $slider->type = $request->input('type');
-    //         $slider->title = $request->input('title');
-    //         $slider->starting_price = $request->input('starting_price');
-    //         $slider->btn_url = $request->input('btn_url');
-    //         $slider->serial = $request->input('serial');
-    //         $slider->status = $request->input('status');
-
-    //         $slider->save();
-    //         DB::commit();
-    //         toastr()->success('Slider created successfully.', 'Success!');
-    //         return redirect()->route('admin.sliders.index');
-    //         // return response()->json([
-    //         //     'code' => 201,
-    //         //     'message' => 'Slider created successfully.'
-    //         // ], 201);
-    //     } catch (\Exception $e) {
-    //         // Handle the exception
-    //         DB::rollBack();
-    //         toastr()->error('Failed to create slider. Please try again.', 'Error!');
-    //         return redirect()->back();
-    //         // Log::error($e->getMessage());
-    //         // return response()->json([
-    //         //     'code' => 500,
-    //         //     'message' => 'Failed to create slider. Please try again.'
-    //         // ], 500);
-    //     }
-
-    // }
-
-    /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        // Find the slider by ID
+        try {
+            $slider = Slider::findOrFail($id);
+
+            // Return the slider data as JSON
+            return response()->json($slider, 200);
+        } catch (\Exception $e) {
+            // Handle the exception, return an error response
+            return response()->json(['error' => 'Slider not found.'], 404);
+        }
     }
 
     /**
@@ -151,6 +111,7 @@ class SliderController extends Controller
      */
     public function edit(string $id)
     {
+        // Find the slider by ID
         try {
             $slider = Slider::findOrFail($id);
     
@@ -167,15 +128,23 @@ class SliderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // $request->validate([
-        //     'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
-        //     'type' => 'string|max:200',
-        //     'title' => 'required|max:200',
-        //     'starting_price' => 'max:200',
-        //     'btn_url' => 'url',
-        //     'serial' => 'required|integer',
-        //     'status' => 'required',
-        // ]);
+        $msg = [
+            'type.required' => 'Type is required',
+            'title.required' => 'Title is required',
+            'status.required' => 'Status is required',
+            'starting_price.max' => 'Starting Price is too long',
+            'btn_url.url' => 'Button URL is not valid URL',
+            'serial.integer' => 'Serial is not valid integer',
+        ];
+        $request->validate([
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
+            'type' => 'string|max:200',
+            'title' => 'required|max:200',
+            'starting_price' => 'max:200',
+            'btn_url' => 'url',
+            'serial' => 'required|integer',
+            'status' => 'required',
+        ], $msg);
         
         DB::beginTransaction();
         try {

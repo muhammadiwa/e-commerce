@@ -17,16 +17,18 @@
               <h6>Pinned</h6>
             </li>
             <hr>
-            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="home"></i><span class="lan-3">Dashboard</span></a>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.dashboard') }}"><i data-feather="home"></i><span class="lan-3">Dashboard</span></a>
+              
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="list"></i><span class="lan-1">Manage Categories</span></a>
               <ul class="sidebar-submenu">
-                <li><a class="lan-4" href="{{ route('admin.dashboard') }}">Default</a></li>
-                <li><a class="lan-5" href="{{ route('ecommerce_dashboard') }}">Ecommerce</a></li>
+                <li><a href="{{ route('admin.category.index') }}">Category</a></li>
               </ul>
             </li>
             <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="airplay"></i><span class="lan-6">Manage Website</span></a>
               <ul class="sidebar-submenu">
                 <li><a href="{{ route('admin.sliders.index') }}">Slider</a></li>
-                <li><a href="{{ route('chart_widget') }}">oke</a></li>
+                <li><a href="{{ route('admin.category.index') }}">Category</a></li>
               </ul>
             </li>
             <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="{{ route('file_manager') }}"><i data-feather="git-pull-request"> </i><span>File manager</span></a></li>

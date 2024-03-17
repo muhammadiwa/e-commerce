@@ -23,6 +23,10 @@
 <!-- Bootstrap css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
 
+<!-- Bootstrap Icon Picker CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-iconpicker/1.10.0/css/bootstrap-iconpicker.min.css" rel="stylesheet">
+
+
 <!-- App css-->
 @vite(['public/assets/scss/style.scss','resources/js/app.js']);
 

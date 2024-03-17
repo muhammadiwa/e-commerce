@@ -34,41 +34,6 @@
                 </div>
                 <div class="card-body">
                     {{ $dataTable->table() }}
-                    <!-- <div class="dt-ext table-responsive theme-scrollbar">
-                        <table class="display" id="keytable">
-                            <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Banner</th>
-                                <th>Title</th>
-                                <th>Type</th>
-                                <th>Starting Price</th>
-                                <th>Link Url</th>
-                                <th>Serial</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
-                                <td>Tata Co.</td>
-                                <td>#AS61</td>
-                                <td> <i class="icofont icofont-arrow-up me-1">1.4%</i></td>
-                                <td>2011/04/25</td>
-                                <td><span class="badge badge-light-warning">Medium</span></td>
-                                <td>$320.800,00</td>
-                                <td> 
-                                <ul class="action"> 
-                                    <li class="edit"> <a href="#"><i class="icon-pencil-alt"></i></a></li>
-                                    <li class="delete"><a href="#"><i class="icon-trash"></i></a></li>
-                                </ul>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        </div> -->
                 </div>
             </div>
         </div>
@@ -145,7 +110,7 @@
         aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form action="#" id="EditSliderForm" enctype="multipart/form-data">
+                <form method="POST" id="EditSliderForm" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
                         <h4 class="modal-title" id="myLargeModalLabel">Edit Slider</h4>
@@ -201,7 +166,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="button"
                             data-bs-dismiss="modal">Close</button>
-                        <button class="btn btn-secondary" type="submit" id="updateSlider">Save changes</button>
+                        <button class="btn btn-secondary" type="button" id="updateSlider">Save changes</button>
                     </div>
                 </form>
             </div>
@@ -228,31 +193,41 @@
                 data: formData,
                 contentType: false,
                 processData: false,
-                success: function (data) {
-                    if (data.status === 200) {
+                success: function (response) {
+                    if (response.status === 200) {
                         $('#AddSliderModal').modal('hide');
                         // Optionally, you can update the slider list or perform any other action after success
                         location.reload();
-                        toastr.success(data.message, 'Success!');
+                        toastr.success(response.message, 'Success!');
                     } else {
-                        toastr.error('Failed to create slider. Please try again.', 'Error!');
+                        toastr.error(response.message, 'Error!');
                     }
                 },
-                error: function (error) {
-                    toastr.error('Failed to create slider. Please try again.', 'Error!');
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    if (xhr.status == 422) {
+                        var errors = xhr.responseJSON.errors;
+                        var errorMessage = '';
+                        $.each(errors, function(key, value) {
+                            errorMessage += value[0] + '\n';
+                        });
+                        toastr.error(errorMessage);
+                    } else {
+                        toastr.error(response.message, 'Error!');
+                    }
                 }
             });
         });
     });
 
     // Function to handle editing slider data
-    function editModal(event, sliderId) {
+    function editModal(event, id) {
         // Prevent the default behavior of the link
         event.preventDefault();
 
         $.ajax({
             type: 'GET',
-            url: `/admin/sliders/${sliderId}/edit`,
+            url: '/admin/sliders/' + id + '/edit',
             success: function (data) {
                 // Populate the edit modal with the retrieved data
                 $('#EditSliderForm input[name="title"]').val(data.title);
@@ -265,48 +240,75 @@
                 // Assuming data.banner contains the image path
                 $('#EditSliderForm #previewBanner').attr('src', '/' + data.banner);
 
+                // Set the data-id attribute to the slider id
+                $('#EditSliderForm').attr('data-id', id);
+
                 // Open the edit modal
                 $('#EditSliderModal').modal('show');
 
-                // Add a click event for the update button inside the modal
-                $('#updateSlider').off('click').on('click', function () {
-                    // Get the updated data from the form
-                    var formData = new FormData($('#EditSliderForm')[0]);
-
-                    // Check if a new file is selected
-                    var newBanner = $('#EditSliderForm input[name="banner"]')[0].files[0];
-                    if (newBanner) {
-                        formData.append('banner', newBanner);
-                    }
-
-                    $.ajax({
-                        type: 'PUT',
-                        url: '/admin/sliders/' + sliderId,
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            toastr.success('Slider updated successfully.', 'Success!');
-                            // Optionally, you can close the modal after a successful update
-                            $('#EditSliderModal').modal('hide');
-                            // You may also want to update your DataTable here or reload the page
-                            location.reload();
-                        },
-                        error: function (error) {
-                            // Handle error, e.g., show an error message
-                            console.log(error);
-                            toastr.error('Failed to update slider. Please try again.', 'Error!');
-                        }
-                    });
-                });
             },
             error: function (error) {
-                // Handle error, e.g., show an error message
-                console.log(error);
-                toastr.error('Failed to fetch slider data. Please try again.', 'Error!');
+                console.error(xhr.responseText);
+                if (xhr.status == 422) {
+                    var errors = xhr.responseJSON.errors;
+                    var errorMessage = '';
+                    $.each(errors, function(key, value) {
+                        errorMessage += value[0] + '\n';
+                    });
+                    toastr.error(errorMessage);
+                } else {
+                    toastr.error(response.message, 'Error!');
+                }
             }
         });
     }
+
+    
+    // Add a click event for the update button inside the modal
+    $('#updateSlider').off('click').on('click', function () {
+        // Get the updated data from the form
+
+        var id = $('#EditSliderForm').data('id');
+        var formData = $('#EditSliderForm').serialize();
+
+        // Check if a new file is selected
+        var newBanner = $('#EditSliderForm input[name="banner"]')[0].files[0];
+        if (newBanner) {
+            formData.append('banner', newBanner);
+        }
+
+        $.ajax({
+            type: 'PUT',
+            url: '/admin/sliders/' + id,
+            data: formData,
+            success: function (response) {
+                if (response.status == 200) {
+                    // Optionally, you can close the modal after a successful update
+                    $('#EditSliderModal').modal('hide');
+                    // You may also want to update your DataTable here or reload the page
+                    location.reload();
+                    // Handle success, e.g., show a success message
+                    toastr.success(response.message, 'Success!');
+                } else {
+                    // Handle error, e.g., show an error message
+                    toastr.error(response.message, 'Error!');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                if (xhr.status == 422) {
+                    var errors = xhr.responseJSON.errors;
+                    var errorMessage = '';
+                    $.each(errors, function(key, value) {
+                        errorMessage += value[0] + '\n';
+                    });
+                    toastr.error(errorMessage);
+                } else {
+                    toastr.error(response.message);
+                }
+            }
+        });
+    });
 
 
 
