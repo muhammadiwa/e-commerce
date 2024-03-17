@@ -165,4 +165,29 @@ class CategoryController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Change category status
+     */
+    public function changeStatus(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $category = Category::findOrFail($request->id);
+            $category->status = $request->status;
+            $category->save();
+
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Category status updated successfully.'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to update category status. Please try again.'
+            ], 500);
+        }
+    } 
 }

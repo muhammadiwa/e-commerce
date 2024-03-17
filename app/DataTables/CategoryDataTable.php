@@ -35,9 +35,17 @@ class CategoryDataTable extends DataTable
                 return $editBtn . $deleteBtn;
             })
             ->addColumn('status', function($query){
-                $button = '<label class="switch icon-state">
-                    <input type="checkbox"><span class="switch-state"></span>
-                </label>';
+                if($query->status == 1){
+                    $button = '<label class="switch icon-state">
+                        <input type="checkbox" checked class="custom-switch-input change-status" data-id="' . $query->id . '" name="status">
+                        <span class="switch-state"></span>
+                    </label>';
+                }else{
+                    $button = '<label class="switch icon-state">
+                        <input type="checkbox" class="custom-switch-input change-status" data-id="' . $query->id . '" name="status">
+                        <span class="switch-state"></span>
+                    </label>';
+                }
                 
                 return $button;
             })

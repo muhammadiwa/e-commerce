@@ -18,4 +18,5 @@ Route::resource('profile', ProfileController::class);
 Route::resource('sliders', SliderController::class);
 
 /** Category Route  */
+Route::put('change-status', [CategoryController::class, 'changeStatus'])->name('category.change-status');
 Route::resource('category', CategoryController::class);

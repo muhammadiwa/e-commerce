@@ -254,6 +254,42 @@
         });
     });
 
+    $(document).ready(function () {
+        $('body').on('click', '.change-status', function () {
+            var id = $(this).data('id');
+            var isChecked = $(this).is(':checked') ? 1 : 0;
+
+            $.ajax({
+                url: "{{ route('admin.category.change-status') }}",
+                type: 'PUT',
+                data: {
+                    status: isChecked,
+                    id: id
+                },
+                success: function (response) {
+                    if (response.status == 200) {
+                        toastr.success(response.message, 'Success!');
+                    } else {
+                        toastr.error(response.message, 'Error!');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    if (xhr.status == 422) {
+                        var errors = xhr.responseJSON.errors;
+                        var errorMessage = '';
+                        $.each(errors, function (key, value) {
+                            errorMessage += value[0] + '\n';
+                        });
+                        toastr.error(errorMessage);
+                    } else {
+                        toastr.error(response.message, 'Error!');
+                    }
+                }
+            });
+        });
+    });
+
 
   </script>
 
