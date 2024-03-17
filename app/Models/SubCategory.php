@@ -7,26 +7,31 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Slider extends Model
+class SubCategory extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'title',
-        'banner',
-        'type',
-        'btn_url',
-        'starting_price',
-        'serial',
+        'name',
+        'category_id',
+        'slug',
         'status',
     ];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+
+    // Customize the log description if needed
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['title', 'banner', 'type', 'btn_url', 'starting_price', 'serial', 'status'])
-            ->useLogName('slider')
+            ->logOnly(['name', 'category_id', 'slug', 'status'])
+            ->useLogName('sub-category')
             ->dontSubmitEmptyLogs()
             ->logOnlyDirty();
     }
+
 }
