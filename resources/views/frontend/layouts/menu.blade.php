@@ -1,5 +1,11 @@
 @php
-    $categories = App\Models\Category::where('status', 1)->get();
+    $categories = App\Models\Category::where('status', 1)
+    ->with(['subCategories' => function ($query) {
+        $query->where('status', 1)->with(['childCategories' => function ($query) {
+            $query->where('status', 1);
+        }]);
+    }])
+    ->get();
 @endphp
 <!--============================
     MAIN MENU START
