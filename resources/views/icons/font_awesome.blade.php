@@ -1,7 +1,7 @@
-@extends('layout.master')
+{{-- @extends('layout.master')
 
-@section('main_content')
-<div class="container-fluid">
+@section('main_content') --}}
+{{-- <div class="container-fluid">
     <div class="page-title">
       <div class="row">
         <div class="col-sm-6">
@@ -9,14 +9,14 @@
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i data-feather="home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i data-feather="home"></i></a></li>
             <li class="breadcrumb-item">Icons</li>
             <li class="breadcrumb-item active">Font Awesome Icon</li>
           </ol>
         </div>
       </div>
     </div>
-  </div>
+  </div> --}}
   <!-- Container-fluid starts-->
   <div class="container-fluid">
     <div class="row">
@@ -713,12 +713,12 @@
       </div>
     </div>
   </div>
-</div>
-@endsection
+{{-- </div> --}}
+{{-- @endsection --}}
 
-@section('scripts')
+{{-- @section('scripts')
 <script src="{{ asset('assets/js/notify/bootstrap-notify.min.js') }}"></script>
 <script src="{{ asset('assets/js/icons/icons-notify.js') }}"></script>
 <script src="{{ asset('assets/js/icons/icon-clipart.js') }}"></script>
 <script src="{{ asset('assets/js/tooltip-init.js') }}"></script>   
-@endsection
+@endsection --}}

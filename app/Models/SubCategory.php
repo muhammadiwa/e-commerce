@@ -23,6 +23,11 @@ class SubCategory extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function childCategories()
+    {
+        return $this->hasMany(ChildCategory::class);
+    }
+
 
     // Customize the log description if needed
     public function getActivitylogOptions(): LogOptions

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\DataTables\SubCategoryDataTable;
+use App\Models\ChildCategory;
 
 class SubCategoryController extends Controller
 {
@@ -137,15 +138,23 @@ class SubCategoryController extends Controller
      */
     public function destroy(string $id)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $subCategory = SubCategory::findOrFail($id);
-            $subCategory->delete();
-            DB::commit();
-            return response()->json([
-                'code' => 200,
-                'message' => 'Sub Category deleted successfully.'
-            ], 200);
+            $childCategory = ChildCategory::where('sub_category_id', $subCategory->id)->count();
+            if ($childCategory > 0) {
+                return response()->json([
+                    'code' => 500,
+                    'message' => 'Sub Category has child category. Please delete child category first.'
+                ], 500);
+            } else {
+                $subCategory->delete();
+                DB::commit();
+                return response()->json([
+                    'code' => 200,
+                    'message' => 'Sub Category deleted successfully.'
+                ], 200);
+            }
         } catch (\Exception $e) {
             // Handle the exception
             DB::rollBack();

@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Backend\Admin;
 
 use App\Models\Category;
+use App\Models\SubCategory;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\DataTables\CategoryDataTable;
-use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -147,15 +148,23 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $category = Category::findOrFail($id);
-            $category->delete();
-            DB::commit();
-            return response()->json([
-                'code' => 200,
-                'message' => 'Category deleted successfully.'
-            ], 200);
+            $subCategory = SubCategory::where('category_id', $category->id)->count();
+            if ($subCategory > 0) {
+                return response()->json([
+                    'code' => 500,
+                    'message' => 'Category has sub-category. Please delete sub-category first.'
+                ], 500);
+            } else {
+                $category->delete();
+                DB::commit();
+                return response()->json([
+                    'code' => 200,
+                    'message' => 'Category deleted successfully.'
+                ], 200);
+            }
         } catch (\Exception $e) {
             // Handle the exception
             DB::rollBack();

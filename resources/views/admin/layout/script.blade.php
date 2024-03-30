@@ -66,17 +66,24 @@
                                 Swal.fire(
                                     'Deleted!',
                                     response.message,
+                                    'success'
                                 )
                                 location.reload();
                             }else if(response.code == 500){
                                 Swal.fire(
                                     'Error!',
                                     response.message,
+                                    'error'
                                 )
                             }
                           },
                           error: function(xhr, status, error) {
-                              console.log(xhr.responseText);
+                            var errorMessage = JSON.parse(xhr.responseText); // Parse pesan kesalahan dari respons JSON
+                                Swal.fire(
+                                    'Cant Delete!',
+                                    errorMessage.message, // Gunakan hanya pesan kesalahan dari respons JSON
+                                    'error' // tambahkan parameter 'error' untuk menampilkan ikon error
+                                )
                           }
                               // window.location.href = url;
                       });

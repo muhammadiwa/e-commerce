@@ -111,7 +111,11 @@
                                     <div class="col-md-12 col-sm-12">
                                         <div class="mb-3">
                                             <label class="form-label">Icon</label>
-                                            <input class="form-control" type="text" name="icon" value="{{ old('icon') }}" placeholder="Category Icon" required>
+                                            <div class="input-group">
+                                                <input class="form-control" type="text" name="icon" value="{{ old('icon') }}" placeholder="Category Icon"
+                                                    aria-label="Category Icon"><span
+                                                    class="input-group-text" onclick="openIconModal()">Pick Icon</span>
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
@@ -150,7 +154,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    @include('icons.ico_icon')
+                    @include('icons.font_awesome')
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="button"
@@ -165,7 +169,7 @@
 <script src="{{ asset('assets/js/notify/bootstrap-notify.min.js') }}"></script>
 <script src="{{ asset('assets/js/icons/icons-notify.js') }}"></script>
 <script src="{{ asset('assets/js/icons/icon-clipart.js') }}"></script>
-<script src="{{ asset('assets/js/tooltip-init.js') }}"></script>   
+<script src="{{ asset('assets/js/tooltip-init.js') }}"></script>     
 <script>
     function openModal(){
         $('#AddCategoryModal').modal('show');

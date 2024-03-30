@@ -216,53 +216,53 @@
 // Language
 var tnum = 'en';
 
-$(document).ready(function () {
+// $(document).ready(function () {
 
-    if (localStorage.getItem("primary") != null) {
-        var primary_val = localStorage.getItem("primary");
-        $("#ColorPicker1").val(primary_val);
-        var secondary_val = localStorage.getItem("secondary");
-        $("#ColorPicker2").val(secondary_val);
-    }
-
-
-    $(document).on('click', function (e) {
-        $('.translate_wrapper, .more_lang').removeClass('active');
-    });
-    $('.translate_wrapper .current_lang').on('click', function (e) {
-        e.stopPropagation();
-        $(this).parent().toggleClass('active');
-
-        setTimeout(function () {
-            $('.more_lang').toggleClass('active');
-        }, 5);
-    });
+//     if (localStorage.getItem("primary") != null) {
+//         var primary_val = localStorage.getItem("primary");
+//         $("#ColorPicker1").val(primary_val);
+//         var secondary_val = localStorage.getItem("secondary");
+//         $("#ColorPicker2").val(secondary_val);
+//     }
 
 
-    /*TRANSLATE*/
-    translate(tnum);
+//     $(document).on('click', function (e) {
+//         $('.translate_wrapper, .more_lang').removeClass('active');
+//     });
+//     $('.translate_wrapper .current_lang').on('click', function (e) {
+//         e.stopPropagation();
+//         $(this).parent().toggleClass('active');
 
-    $('.more_lang .lang').on('click', function () {
-        $(this).addClass('selected').siblings().removeClass('selected');
-        $('.more_lang').removeClass('active');
-
-        var i = $(this).find('i').attr('class');
-        var lang = $(this).attr('data-value');
-        var tnum = lang;
-        translate(tnum);
-
-        $('.current_lang .lang-txt').text(lang);
-        $('.current_lang i').attr('class', i);
+//         setTimeout(function () {
+//             $('.more_lang').toggleClass('active');
+//         }, 5);
+//     });
 
 
-    });
-});
+//     /*TRANSLATE*/
+//     translate(tnum);
 
-function translate(tnum, index) {
-    for(var i=1;i<=9;i++){
-        $('.lan-'+i).text(trans[i-1][tnum]);
-    }
-}
+//     $('.more_lang .lang').on('click', function () {
+//         $(this).addClass('selected').siblings().removeClass('selected');
+//         $('.more_lang').removeClass('active');
+
+//         var i = $(this).find('i').attr('class');
+//         var lang = $(this).attr('data-value');
+//         var tnum = lang;
+//         translate(tnum);
+
+//         $('.current_lang .lang-txt').text(lang);
+//         $('.current_lang i').attr('class', i);
+
+
+//     });
+// });
+
+// function translate(tnum, index) {
+//     for(var i=1;i<=9;i++){
+//         $('.lan-'+i).text(trans[i-1][tnum]);
+//     }
+// }
 
 // var trans = [{
 //         en: 'General',

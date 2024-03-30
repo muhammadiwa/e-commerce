@@ -106,8 +106,8 @@ class SubCategoryDataTable extends DataTable
                 ->orderable(false)
                 ->searchable(false)
                 ->addClass('text-center'),
-            Column::make('category_id')->title('Category')->width(400),
             Column::make('name'),
+            Column::make('category_id')->title('Category')->width(400),
             Column::make('status')->width(100),
             Column::computed('action')
                   ->exportable(false)
