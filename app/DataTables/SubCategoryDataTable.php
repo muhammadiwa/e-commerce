@@ -36,16 +36,29 @@ class SubCategoryDataTable extends DataTable
             })
             ->addColumn('status', function($query){
                 if($query->status == 1){
-                    $button = '<label class="switch icon-state">
-                        <input type="checkbox" checked class="custom-switch-input change-status" data-id="' . $query->id . '" name="status">
-                        <span class="switch-state"></span>
-                    </label>';
+                    $button = '<div class="flex-grow-1 text-start switch-sm">
+                    <label class="switch">
+                        <input type="checkbox" checked><span class="switch-state change-status" data-id="' . $query->id . '" name="status"></span>
+                    </label>
+                </div>';
                 }else{
-                    $button = '<label class="switch icon-state">
-                        <input type="checkbox" class="custom-switch-input change-status" data-id="' . $query->id . '" name="status">
-                        <span class="switch-state"></span>
-                    </label>';
+                    $button = '<div class="flex-grow-1 text-start switch-sm">
+                    <label class="switch">
+                        <input type="checkbox" ><span class="switch-state change-status" data-id="' . $query->id . '" name="status"></span>
+                    </label>
+                </div>';
                 }
+                // if($query->status == 1){
+                //     $button = '<label class="switch icon-state">
+                //         <input type="checkbox" checked class="custom-switch-input change-status" data-id="' . $query->id . '" name="status">
+                //         <span class="switch-state"></span>
+                //     </label>';
+                // }else{
+                //     $button = '<label class="switch icon-state">
+                //         <input type="checkbox" class="custom-switch-input change-status" data-id="' . $query->id . '" name="status">
+                //         <span class="switch-state"></span>
+                //     </label>';
+                // }
                 
                 return $button;
             })
@@ -89,7 +102,10 @@ class SubCategoryDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('DT_RowIndex')->title('No')->width(50),
+            Column::make('DT_RowIndex')->title('No')->width(50)
+                ->orderable(false)
+                ->searchable(false)
+                ->addClass('text-center'),
             Column::make('category_id')->title('Category')->width(400),
             Column::make('name'),
             Column::make('status')->width(100),

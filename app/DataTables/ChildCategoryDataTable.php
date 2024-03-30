@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Category;
+use App\Models\ChildCategory;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class CategoryDataTable extends DataTable
+class ChildCategoryDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,12 +23,15 @@ class CategoryDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->addColumn('icon', function ($query) {
-                return "$query->icon";
+            ->addColumn('category_id', function($query){
+                return $query->category->name;
+            })
+            ->addColumn('sub_category_id', function($query){
+                return $query->subCategory->name;
             })
             ->addColumn('action', function ($query) {
-                $edit = route('admin.category.edit', $query->id);
-                $delete = route('admin.category.destroy', $query->id);
+                $edit = route('admin.child-category.edit', $query->id);
+                $delete = route('admin.child-category.destroy', $query->id);
                 $editBtn = "<a href='#' onclick='editModal(event, $query->id)' class='text-primary edit'><i class='icon-pencil-alt'></i></a>";
                 $deleteBtn = "<a href='$delete' class='text-danger delete-item'><i class='icon-trash'></i></a>";
 
@@ -62,14 +65,14 @@ class CategoryDataTable extends DataTable
                 
                 return $button;
             })
-            ->rawColumns(['DT_RowIndex', 'action', 'status', 'icon'])
+            ->rawColumns(['status', 'action','category_id', 'sub_category_id', 'DT_RowIndex'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Category $model): QueryBuilder
+    public function query(ChildCategory $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -80,7 +83,7 @@ class CategoryDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('category-table')
+                    ->setTableId('childcategory-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -106,7 +109,8 @@ class CategoryDataTable extends DataTable
                 ->orderable(false)
                 ->searchable(false)
                 ->addClass('text-center'),
-            Column::make('icon')->width(200),
+            Column::make('category_id')->title('Category')->width(400),
+            Column::make('sub_category_id')->title('Sub Category')->width(400),
             Column::make('name'),
             Column::make('status')->width(100),
             Column::computed('action')
@@ -122,6 +126,6 @@ class CategoryDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Category_' . date('YmdHis');
+        return 'ChildCategory_' . date('YmdHis');
     }
 }

@@ -59,8 +59,13 @@
                                     <div class="col-md-12 col-sm-12">
                                         <div class="mb-3">
                                             <label class="form-label">Icon</label>
-                                            <input class="form-control" type="text" name="icon" value="{{ old('icon') }}" placeholder="Category Icon" required>
+                                            <div class="input-group">
+                                                <input class="form-control" type="text" name="icon" value="{{ old('icon') }}" placeholder="Category Icon"
+                                                    aria-label="Category Icon"><span
+                                                    class="input-group-text" onclick="openIconModal()">Pick Icon</span>
+                                            </div>
                                         </div>
+                                        
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
                                             <input class="form-control" type="text" name="name" value="{{ old('name') }}" placeholder="Category Name" required>
@@ -133,12 +138,41 @@
             </div>
         </div>
     </div>
+
+    {{-- Icon Modal --}}
+    <div class="modal fade bd-example-modal-lg" id="IconModal" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myLargeModalLabel">Pick Icon</h4>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @include('icons.ico_icon')
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button"
+                        data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
+<script src="{{ asset('assets/js/notify/bootstrap-notify.min.js') }}"></script>
+<script src="{{ asset('assets/js/icons/icons-notify.js') }}"></script>
+<script src="{{ asset('assets/js/icons/icon-clipart.js') }}"></script>
+<script src="{{ asset('assets/js/tooltip-init.js') }}"></script>   
 <script>
     function openModal(){
         $('#AddCategoryModal').modal('show');
+    }
+
+    function openIconModal(){
+        $('#IconModal').modal('show');
     }
 
     $(document).ready(function() {

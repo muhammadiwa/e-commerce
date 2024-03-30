@@ -158,12 +158,23 @@ class SubCategoryController extends Controller
 
     public function changeStatus(Request $request)
     {
-        $subCategory = SubCategory::findOrFail($request->id);
-        $subCategory->status = $request->status;
-        $subCategory->save();
-        return response()->json([
-            'code' => 200,
-            'message' => 'Sub Category status changed successfully.'
-        ], 200);
+        DB::beginTransaction();
+        try {
+            $subCategory = SubCategory::findOrFail($request->id);
+            $subCategory->status = $request->status;
+            $subCategory->save();
+            DB::commit();
+            return response()->json([
+                'code' => 200,
+                'message' => 'Sub Category status changed successfully.'
+            ], 200);
+        } catch (\Exception $e) {
+            // Handle the exception
+            DB::rollBack();
+            return response()->json([
+                'code' => 500,
+                'message' => 'Failed to change sub category status. Please try again.'
+            ], 500);
+        }
     }
 }
